@@ -1,4 +1,4 @@
-package assignment2;
+
 
 import java.util.Iterator;
 
@@ -7,6 +7,10 @@ private int size = 0;
 private Node first = null;
 private Node last = null;
 	
+	public Deque() {
+		
+	}
+	
 	private class Node {
 		Item item;
 		Node next;
@@ -14,7 +18,7 @@ private Node last = null;
 	}
 	
 	public boolean isEmpty() {
-		return first==null;
+		return first == null;
 	}
 	
 	public int size() {
@@ -22,50 +26,53 @@ private Node last = null;
 	}
 	
 	public void addFirst(Item item) {
-		if(item == null) {
-			throw new IllegalArgumentException("Empty deque");
+		if (item == null) {
+			throw new java.lang.IllegalArgumentException("Empty deque");
 		}
 		Node newNode = new Node();
 		newNode.item = item;
-		if(isEmpty()) {
+		if (isEmpty()) {
 			first = newNode;
 			last = first;
 			first.next = null;
+		} else {
+			Node oldFirst = first;
+			first = newNode;
+			oldFirst.previous = first;
+			first.next = oldFirst;
 		}
-		Node oldFirst = first;
-		first = newNode;
-		oldFirst.previous = first;
-		first.next = oldFirst;
 		++size;
 	}
 	
 	public void addLast(Item item) {
-		if(item == null) {
-			throw new IllegalArgumentException("Empty deque");
+		if (item == null) {
+			throw new java.lang.IllegalArgumentException("Empty deque");
 		}
 		Node newNode = new Node();
 		newNode.item = item;
-		if(isEmpty()) {
+		if (isEmpty()) {
 			first = newNode;
 			last = first;
 			first.next = null;
-		}
-		Node oldLast = last;
-		last = newNode;
-		oldLast.next = last;
-		last.previous = oldLast;
+		} else {
+			Node oldLast = last;
+			last = newNode;
+			oldLast.next = last;
+			last.previous = oldLast;
+		}	
 		++size;
 	}
 	
 	public Item removeFirst() {
-		if(isEmpty()) {
+		if (isEmpty()) {
 			throw new java.util.NoSuchElementException("Empty deque");
 		}
 		Node oldFirst;
-		if(first==last) {
+		if (first == last) {
 			oldFirst = first;
 			first = null;
 			last = null;
+			--size;
 			return oldFirst.item;
 		}
 		oldFirst = first;
@@ -75,14 +82,15 @@ private Node last = null;
 	}
 	
 	public Item removeLast() {
-		if(isEmpty()) {
+		if (isEmpty()) {
 			throw new java.util.NoSuchElementException("Empty deque");
 		}
 		Node oldLast;
-		if(first==last) {
+		if (first == last) {
 			oldLast = last;
 			first = null;
 			last = null;
+			--size;
 			return oldLast.item;
 		}
 		oldLast = last;
@@ -96,7 +104,7 @@ private Node last = null;
 		return new ListIterator();
 	}
 	
-	private class ListIterator implements Iterator<Item>{
+	private class ListIterator implements Iterator<Item> {
 		private Node current = first;
 		
 		public boolean hasNext() {
@@ -104,11 +112,11 @@ private Node last = null;
 		}
 		
 		public void remove() {
-			/*Not supported */
+			throw new java.lang.UnsupportedOperationException("Implementation not supported");
 		}
 		
 		public Item next() {
-			if(!hasNext()) {
+			if (!hasNext()) {
 				throw new java.util.NoSuchElementException("No more items to return");
 			}
 			Item item = current.item;
