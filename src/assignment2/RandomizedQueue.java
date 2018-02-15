@@ -101,11 +101,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 		}
 		return arr[rnd];
 	}
+	@Override
 	public Iterator<Item> iterator() {
 		return new ListIterator();
 	}
 	private class ListIterator implements Iterator<Item> {
 		private int current = first;
+		@Override
 		public boolean hasNext() {
 			if (size != 0) {
 				return true;
@@ -113,10 +115,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 			return false;
 		}
 		
+		@Override
 		public void remove() {
 			throw new java.lang.UnsupportedOperationException("Not a support implementation");
 		}
 		
+		@Override
 		public Item next() {
 			if(!hasNext()) {
 				throw new java.util.NoSuchElementException("All items visited");

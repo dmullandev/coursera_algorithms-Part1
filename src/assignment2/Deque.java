@@ -100,6 +100,7 @@ private Node last = null;
 		return oldLast.item;
 	}
 	
+	@Override
 	public Iterator<Item> iterator() {
 		return new ListIterator();
 	}
@@ -107,14 +108,17 @@ private Node last = null;
 	private class ListIterator implements Iterator<Item> {
 		private Node current = first;
 		
+		@Override
 		public boolean hasNext() {
 			return current != null;
 		}
 		
+		@Override
 		public void remove() {
 			throw new java.lang.UnsupportedOperationException("Implementation not supported");
 		}
 		
+		@Override
 		public Item next() {
 			if (!hasNext()) {
 				throw new java.util.NoSuchElementException("No more items to return");
