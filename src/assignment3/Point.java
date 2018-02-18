@@ -18,10 +18,10 @@ public class Point implements Comparable<Point> {
         StdDraw.line(this.x, this.y, that.x, that.y);
     }
     
-	public String toString() {
+    public String toString() {
         return "(" + x + ", " + y + ")";
     }
-	
+
 	public int compareTo(Point that) {
 	    if (that == null) {
             throw new java.lang.NullPointerException("Null point to compareTo");
@@ -31,7 +31,7 @@ public class Point implements Comparable<Point> {
 	        return -1; // if this is smaller than that
 	    } else if (that.y < this.y) {
 	        return +1; // if this is greater than that
-	    } else if (that.y == this.y){
+	    } else if (that.y == this.y) {
 	        if (that.x > this.x) {
 	            return -1;
 	        } else if (that.x < this.x) {
@@ -39,10 +39,6 @@ public class Point implements Comparable<Point> {
 	        }
 	    }
 	    return 0;
-//        if (that.y < this.y || (that.y == this.y && that.x < this.x)) return -1; // if that is less
-//        if (that.y > this.y || (that.y == this.y && that.x > this.x)) return +1; // if that is greater
-//        if (that.y == this.y && that.x > this.x) return +1;
-//        return 0;   // if that is equal
     }
     
     public double slopeTo(Point that) {
