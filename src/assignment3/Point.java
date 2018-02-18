@@ -5,9 +5,26 @@ import edu.princeton.cs.algs4.StdDraw;
 public class Point implements Comparable<Point> {
     private final int x;
     private final int y;
+    
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+    
+    public Comparator<Point> slopeOrder() {
+        return new Comparator<Point>() {
+            @Override
+            public int compare(Point point1, Point point2) {
+                double slopeDiff = slopeTo(point1) - slopeTo(point2);
+                if (slopeDiff > 0) {
+                    return 1;
+                } else if (slopeDiff < 0) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        };
     }
     
     public void draw() {
@@ -22,8 +39,8 @@ public class Point implements Comparable<Point> {
         return "(" + x + ", " + y + ")";
     }
 
-	public int compareTo(Point that) {
-	    if (that == null) {
+    public int compareTo(Point that) {
+        if (that == null) {
             throw new java.lang.NullPointerException("Null point to compareTo");
         }
 	    
@@ -45,17 +62,6 @@ public class Point implements Comparable<Point> {
     	if (that.y == this.y && that.x == this.x) return Double.NEGATIVE_INFINITY; // point to itself
     	if (that.y == this.y) return +0.0; // vertical line
     	if (that.x == this.x) return Double.POSITIVE_INFINITY; // horizontal line positive zero
-        double xSlope = that.x - this.x;
-        double ySlope = that.y - this.y;
-        double slope = ySlope / xSlope;
-        return slope;
-    }
-    
-    public Comparator<Point> slopeOrder() {		
-		return new Comparator<Point>() {
-			public int compare(Point p1, Point p2) {
-				return Double.compare(slopeTo(p1), slopeTo(p2));
-			}
-		};
+        return ((double) (that.y - this.y)) / ((that.x - this.x));
     }
 }

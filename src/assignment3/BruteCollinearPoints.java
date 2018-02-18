@@ -20,7 +20,7 @@ public class BruteCollinearPoints {
         Point q;
         Point r;
         Point s;
-        double rToq, sTor;
+        double pToq, qTor, rTos;
         
         Point[] pointsCopy = Arrays.copyOf(points, points.length);
         Arrays.sort(pointsCopy);
@@ -32,13 +32,13 @@ public class BruteCollinearPoints {
                 q = pointsCopy[k];
                 for (int b = k + 1; b < pointsCopy.length -1; b++) {
                     r = pointsCopy[b];
-                    int slopeOrder = p.slopeOrder().compare(q, r);
-                    if (slopeOrder == 0) { // first three points equal slope, search for fourth
+                    pToq = p.slopeTo(q);
+                    qTor = r.slopeTo(q);
+                    if(pToq == qTor) { // first three points have equal slope, search for fourth
                         for (int j = b + 1; j < pointsCopy.length; j++) {
                             s = pointsCopy[j];
-                            sTor = s.slopeTo(r);
-                            rToq = r.slopeTo(q);
-                            if (sTor == rToq) {
+                            rTos = r.slopeTo(s);
+                            if (rTos == qTor) {
                                 LineSegment ls = new LineSegment(p, s);
                                 foundSegments.add(ls);
                             }
