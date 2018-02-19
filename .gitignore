@@ -1,5 +1,8 @@
 #ignoring
 bin/
-.classpath
+.settings
 .settings/
+.classpath
+.metadata
+.metadata/
 .project
