@@ -158,6 +158,29 @@ public class KdTree {
     }
     
     public Iterable<Point2D> range(RectHV rect) {
+        if (rect == null) throw new java.lang.IllegalArgumentException("null argument to range() is given");
+        if (root == null) throw new java.lang.IllegalArgumentException("root node is null at call to range()");
+        
+        Stack<Node> st = new Stack<Node>();
+        st.push(root);
+        
+        while (st.isEmpty()) {
+            Node current = st.pop();            
+            
+            if (rect.xmin() <= current.p.x() && current.p.x() <= rect.xmax() || rect.ymin() <= current.p.y() && current.p.y() <= rect.ymax()) {
+                if (rect.contains(current.p)) {
+                    set.add(current.p);
+                }
+                st.push(current.lb);
+                st.push(current.rt);
+            } else {
+                if (rect.xmin() < current.p.x() && rect.xmax() < current.p.x() || rect.ymin() < current.p.y() && rect.ymax() < current.p.y()){
+                    st.push(current.lb);
+                } else {
+                    st.push(current.rt);
+                }
+            }
+        }
         return set;
     }
     
