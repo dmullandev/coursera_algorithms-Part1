@@ -1,4 +1,5 @@
 
+
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.SET;
@@ -7,10 +8,8 @@ import edu.princeton.cs.algs4.Stack;
 public class PointSET {
     
     private final SET<Point2D> set;
-    private final Stack<Point2D> points;
     public PointSET() { // construct an empty set of points
         set = new SET<Point2D>();
-        points = new Stack<Point2D>();
     }
     
     public boolean isEmpty() { // is the set empty? 
@@ -38,6 +37,7 @@ public class PointSET {
     }
     
     public Iterable<Point2D> range(RectHV rect) { // all points that are inside the rectangle (or on the boundary) 
+        Stack<Point2D> points = new Stack<Point2D>();
         if (rect == null) throw new java.lang.IllegalArgumentException();
         
         for (Point2D pt : set) {
@@ -52,11 +52,9 @@ public class PointSET {
         if (p == null) throw new java.lang.IllegalArgumentException();
         if (isEmpty()) return null;
         Point2D champion = null;
-        double nearest = Double.POSITIVE_INFINITY;
         for (Point2D pt : set) {
-            double dsq = p.distanceSquaredTo(pt);
-            if (dsq < nearest) {
-                nearest = dsq;
+            if (champion == null) champion = pt;
+            if (pt.distanceSquaredTo(p) < champion.distanceSquaredTo(p)) {
                 champion = pt;
             }
         }

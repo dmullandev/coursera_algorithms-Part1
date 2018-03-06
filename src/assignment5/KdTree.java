@@ -1,17 +1,17 @@
 
+
+import java.util.ArrayList;
+import java.util.List;
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
-import edu.princeton.cs.algs4.SET;
 import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdDraw;
 
 public class KdTree {
-    private final SET<Point2D> set;
     private Node root;
     
     public KdTree() {
         root = null;
-        set = new SET<Point2D>();
     }
     
     private static class Node {
@@ -159,32 +159,71 @@ public class KdTree {
     
     public Iterable<Point2D> range(RectHV rect) {
         if (rect == null) throw new java.lang.IllegalArgumentException("null argument to range() is given");
-        if (root == null) throw new java.lang.IllegalArgumentException("root node is null at call to range()");
-        
+        List<Point2D> points = new ArrayList<Point2D>();
         Stack<Node> st = new Stack<Node>();
         st.push(root);
         
-        while (st.isEmpty()) {
-            Node current = st.pop();            
+        while (!st.isEmpty()) {
+            Node current = st.pop();
             
-            if (rect.xmin() <= current.p.x() && current.p.x() <= rect.xmax() || rect.ymin() <= current.p.y() && current.p.y() <= rect.ymax()) {
-                if (rect.contains(current.p)) {
-                    set.add(current.p);
-                }
+            if (rect.contains(current.p)) {
+                points.add(current.p);
+            }
+            if (current.lb != null && rect.intersects(current.lb.rect)) {
                 st.push(current.lb);
+            }
+            if (current.rt != null && rect.intersects(current.rt.rect)) {
                 st.push(current.rt);
-            } else {
-                if (rect.xmin() < current.p.x() && rect.xmax() < current.p.x() || rect.ymin() < current.p.y() && rect.ymax() < current.p.y()){
-                    st.push(current.lb);
-                } else {
-                    st.push(current.rt);
-                }
             }
         }
-        return set;
+        return points;
     }
     
     public Point2D nearest(Point2D p) {
-        return p;
+        if (p == null) throw new java.lang.IllegalArgumentException("null argument to nearest() is given");
+        Point2D champion = null;
+        Stack<Node> st = new Stack<Node>();
+        st.push(root);
+        champion = root.p;
+        double closestDistance = p.distanceSquaredTo(champion);
+        double cmp = -1;
+        double oppositeRect = -1;
+        
+        while (!st.isEmpty()) {
+            Node current = st.pop();
+            double currentDistance = p.distanceSquaredTo(current.p);
+            
+            if (currentDistance < closestDistance) {
+                closestDistance = currentDistance;
+                champion = current.p;
+            }
+            
+            if (current.level % 2 == 0) {
+                cmp = p.x() - current.p.x();
+            } else {
+                cmp = p.y() - current.p.y();
+            }
+          
+            if (cmp < 0 && current.lb != null) {
+                st.push(current.lb);
+            } else if (cmp > 0 && current.rt != null) {
+                st.push(current.rt);
+            }
+            
+            if (cmp < 0 && current.rt != null) {
+                oppositeRect = current.rt.rect.distanceSquaredTo(p);
+            } else if (cmp > 0 && current.lb != null) {
+                oppositeRect = current.lb.rect.distanceSquaredTo(p);
+            }
+            
+            if (oppositeRect != -1 && oppositeRect < closestDistance) {
+                if (cmp < 0 && current.rt != null) {
+                    st.push(current.rt);
+                } else if (cmp > 0 && current.lb != null){
+                    st.push(current.lb);
+                }
+            }
+        }
+        return champion;
     }
 }
